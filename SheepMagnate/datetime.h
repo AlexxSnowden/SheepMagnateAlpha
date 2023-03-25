@@ -9,9 +9,9 @@ using std::endl;
 
 struct DateTime
 {
-	short day = 1;
-	short month = 1;
-	short year = 2000;
+	short day;
+	short month;
+	short year;
 
 	void print()
 	{
