@@ -6,11 +6,11 @@ using namespace std;
 
 struct SheepName
 {
+	// Пол
+	bool isMale = rand() % 2;
+
 	// Текстовое имя
 	string name = __nameGenerate__();
-
-	// Пол
-	bool isMale;
 
 	// Генерация имени и пола
 	string __nameGenerate__()
@@ -45,8 +45,6 @@ struct SheepName
 			"Sunshine", "Lucy", "Allegra", "Crystal", "Petal", "Pippi"
 		};
 
-		isMale = rand() % 2;
-
 		string result = (isMale) ? maleNames[rand() % maleNamesSize] : femaleNames[rand() % femaleNamesSize];
 
 		delete[] maleNames;
@@ -58,11 +56,11 @@ struct SheepName
 
 struct ClientName
 {
+	// Пол
+	bool isMale = rand() % 2;
+
 	// Текстовое имя
 	string name = __nameGenerate__();
-
-	// Пол
-	bool isMale;
 
 	// Генерация имени и пола
 	string __nameGenerate__()
@@ -108,8 +106,6 @@ struct ClientName
 			"Голубев", "Пономарёв", "Мартынов", "Кириллов", "Миронов", "Фомин", "Власов", "Федотов", "Назаров", "Ушаков", "Денисов",
 			"Константинов", "Воронин", "Наумов"
 		};
-
-		isMale = rand() % 2;
 
 		string result = (isMale) ? maleNames[rand() % maleNamesSize] + ' ' + surnames[rand() % surnamesSize] : femaleNames[rand() % femaleNamesSize] + ' ' + surnames[rand() % surnamesSize] + 'а';
 
