@@ -21,14 +21,6 @@ struct Order
 
 	// Кол-во денег за выполнение
 	int money = (orderType) ? (__random__(300, 600) * order) : (__random__(20, 60) * order);
-
-	// Вывести информацию о заказе
-	void print()
-	{
-		cout << "Заказ " << ((orderType) ? "мяса" : "шерсти") << " до ";
-		dueDate.print();
-		cout << ". " << order << " кг за " << money << " руб." << endl;
-	}
 };
 
 #endif

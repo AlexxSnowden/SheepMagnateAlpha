@@ -35,5 +35,8 @@
     <ClInclude Include="orders.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="clients.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -131,6 +131,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="clients.h" />
     <ClInclude Include="datetime.h" />
     <ClInclude Include="funcs.h" />
     <ClInclude Include="names.h" />

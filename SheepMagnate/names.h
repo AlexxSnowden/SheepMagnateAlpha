@@ -126,7 +126,7 @@ struct CompanyName
 	// Тип компании
 	// 0 - покупает шерсть
 	// 1 - покупает мясо
-	bool companyType;
+	short companyType;
 
 	// Текстовое имя
 	string name = __nameGenerate__();
