@@ -5,8 +5,7 @@
 #include "names.h"
 #include "funcs.h"
 
-using std::cout;
-using std::endl;
+using namespace std;
 
 struct Sheep
 {

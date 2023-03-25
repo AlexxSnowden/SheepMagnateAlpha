@@ -8,13 +8,13 @@ using namespace std;
 struct DateTime
 {
 	// Год
-	short year = __random__(2015, 2022);
+	int year = __random__(2015, 2022);
 
 	// Месяц
-	short month = __random__(1, 12);
+	int month = __random__(1, 12);
 
 	// День
-	short day = __random__(1, __daysInMonth__());
+	int day = __random__(1, __daysInMonth__());
 
 	// Вывести дату в формате ДД.ММ.ГГГГ
 	void print()
