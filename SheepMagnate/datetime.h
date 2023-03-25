@@ -3,16 +3,20 @@
 #define DATETIME_H
 #include "funcs.h"
 
-
-using std::cout;
-using std::endl;
+using namespace std;
 
 struct DateTime
 {
-	short day;
-	short month;
-	short year;
+	// Год
+	short year = __random__(2015, 2022);
 
+	// Месяц
+	short month = __random__(1, 12);
+
+	// День
+	short day = __random__(1, __daysInMonth__());
+
+	// Вывести дату в формате ДД.ММ.ГГГГ
 	void print()
 	{
 		if (day < 10)
@@ -26,13 +30,7 @@ struct DateTime
 		cout << month << '.' << year;
 	}
 
-	void random()
-	{
-		year = __random__(1990, 2023);
-		month = __random__(1, 12);
-		day = __random__(1, __daysInMonth__());
-	}
-
+	// Изменить дату на один день вперёд
 	void switchDay()
 	{
 		day++;
@@ -50,6 +48,7 @@ struct DateTime
 		}
 	}
 
+	// Високосный ли год
 	bool __isTheYearLeap__()
 	{
 		if (year % 4 == 0)
@@ -68,6 +67,7 @@ struct DateTime
 			return 0;
 	}
 
+	// Кол-во дней в месяце
 	inline int __daysInMonth__()
 	{
 		return (__isTheYearLeap__() && month == 2) ? (29 + (month + month / 8) % 2 + 2 % month + 2 * (1 / month)) : (28 + (month + month / 8) % 2 + 2 % month + 2 * (1 / month));
