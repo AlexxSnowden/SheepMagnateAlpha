@@ -9,7 +9,7 @@ using namespace std;
 struct Order
 {
 	// Срок выполнения ДД.01.2023
-	DateTime dueDate{2023, 1};
+	DateTime dueDate{ToDay.year, ToDay.month, __random__(ToDay.day + 1, ToDay.__daysInMonth__())};
 
 	// Тип заказа
 	// 0 - заказ шерсти (в кг)
@@ -17,10 +17,10 @@ struct Order
 	short orderType = rand() % 2;
 
 	// Сам заказ (кол-во шерсти или мяса в кг которое нужно для выполнения заказа)
-	int order = (orderType) ? (__random__(50, 400)) : (10, 100);
+	int order = (orderType) ? (__random__(50, 400)) : (2, 20);
 
 	// Кол-во денег за выполнение
-	int money = (orderType) ? (__random__(300, 600) * order) : (__random__(20, 60) * order);
+	int money = (orderType) ? (__random__(300, 600) * order) : (__random__(200, 600) * order);
 };
 
 #endif

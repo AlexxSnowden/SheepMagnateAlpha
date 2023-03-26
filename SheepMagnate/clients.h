@@ -21,7 +21,9 @@ struct Client
 	void print()
 	{
 		cout << name.name << " из компании \"" << companyName.name << "\" просит " << order.order << " кг"
-			<< ((order.orderType) ? " мяса " : " шерсти ") << "за " << order.money << " руб." << endl;
+			<< ((order.orderType) ? " мяса " : " шерсти ") << "за " << order.money << " руб. Срок: ";
+		order.dueDate.print();
+		cout << endl;
 	}
 };
 

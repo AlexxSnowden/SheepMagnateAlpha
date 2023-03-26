@@ -30,6 +30,50 @@ struct DateTime
 		cout << month << '.' << year;
 	}
 
+	// Вывести дату в формате разницы
+	// ДД дней ММ месяцев ГГ лет
+	void printDiff()
+	{
+		// Если год != 0
+		if (year)
+		{
+			cout << year;
+
+			if (year == 1)
+				cout << " год";
+			else if (year >= 2 && year < 5)
+				cout << " года";
+			else
+				cout << " лет";
+		}
+
+		// Если месяц != 0
+		if (month)
+		{
+			cout << ' ' << month;
+
+			if (month == 1)
+				cout << " месяц";
+			else if (month >= 2 && month < 5)
+				cout << " месяца";
+			else
+				cout << " месяцев";
+		}
+
+		// Если день != 0
+		if (day)
+		{
+			cout << ' ' << day;
+
+			if (day == 1 || day == 21 || day == 31)
+				cout << " день";
+			else if ((day >= 2 && day < 5) || (day >= 22 && day < 25))
+				cout << " дня";
+			else
+				cout << " дней";
+		}
+	}
+
 	// Изменить дату на один день вперёд
 	void switchDay()
 	{
@@ -73,5 +117,31 @@ struct DateTime
 		return (__isTheYearLeap__() && month == 2) ? (29 + (month + month / 8) % 2 + 2 % month + 2 * (1 / month)) : (28 + (month + month / 8) % 2 + 2 % month + 2 * (1 / month));
 	}
 };
+
+DateTime ToDay{2023, 1, 1};
+
+// Посчитать разницу во времени (a - b)
+DateTime datetimeMinus(DateTime a, DateTime b)
+{
+	int year_minus  = (b.month > a.month || b.day > a.day) ? (a.year - b.year - 1) : (a.year - b.year);
+	int month_minus = (b.month > a.month) ? (12 + a.month - b.month) : (a.month - b.month);
+	int day_minus;
+
+	if (b.day > a.day)
+	{
+		day_minus = a.__daysInMonth__() + a.day - b.day;
+
+		if (month_minus)
+			month_minus--;
+	}
+	else
+	{
+		day_minus = a.day - b.day;
+	}
+
+	DateTime result{year_minus, month_minus, day_minus};
+
+	return result;
+}
 
 #endif
