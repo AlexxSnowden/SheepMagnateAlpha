@@ -124,15 +124,14 @@ DateTime ToDay{2023, 1, 1};
 DateTime datetimeMinus(DateTime a, DateTime b)
 {
 	int year_minus  = (b.month > a.month || b.day > a.day) ? (a.year - b.year - 1) : (a.year - b.year);
-	int month_minus = (b.month > a.month) ? (12 + a.month - b.month) : (a.month - b.month);
+	int month_minus = 12 + a.month - b.month;
 	int day_minus;
 
 	if (b.day > a.day)
 	{
-		day_minus = a.__daysInMonth__() + a.day - b.day;
+		day_minus = b.__daysInMonth__() + a.day - b.day;
 
-		if (month_minus)
-			month_minus--;
+		month_minus--;
 	}
 	else
 	{
