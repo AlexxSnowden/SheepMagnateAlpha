@@ -17,10 +17,21 @@ struct Order
 	short orderType = rand() % 2;
 
 	// Сам заказ (кол-во шерсти или мяса в кг которое нужно для выполнения заказа)
-	int order = (orderType) ? (__random__(50, 400)) : (2, 20);
+	int order = (orderType) ? (__random__(50, 150)) : (2, 20);
 
 	// Кол-во денег за выполнение
 	int money = (orderType) ? (__random__(300, 600) * order) : (__random__(200, 600) * order);
+
+	// Вышло ли время заказа
+	bool isOrderEnd()
+	{
+		DateTime temp = datetimeMinus(dueDate, ToDay);
+
+		temp.print();
+		cout << endl;
+
+		return (temp.year < 0) ? 1 : 0;
+	}
 };
 
 #endif

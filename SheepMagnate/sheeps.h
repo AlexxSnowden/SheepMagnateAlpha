@@ -21,7 +21,10 @@ struct Sheep
     // Возраст овцы в годах
     DateTime age = datetimeMinus(ToDay, birthday);
 
-    // Вес овцы (в кг) расчитывается случайно исходя из возраста и пола
+    // Вес шерсти (в г)
+    double woolWeight = __random__(50, 70) * getWooliness() + __random__(1, 1000) / 1000.0;
+
+    // Вес овцы (в кг) расчитывается из суммы веса шерсти и случайных чисел исходя из возраста и пола
     // Если баран:
     //     если др.год == 2022:
     //         случайное число от 45 до 55 + случайное число от 0.001 до 1
@@ -33,10 +36,7 @@ struct Sheep
     //     иначе:
     //         случайное число от 60 до 80 + случайное число от 0.001 до 1
     //
-    double sheepWeight = (isMale) ? ((age.year == 1) ? (__random__(45, 55) + __random__(1, 1000) / 1000.0) : (__random__(70, 100) + __random__(1, 1000) / 1000.0)) : ((age.year == 1) ? (__random__(30, 45) + __random__(1, 1000) / 1000.0) : (__random__(60, 80) + __random__(1, 1000) / 1000.0));
-    
-    // Вес шерсти (в г) расчитывается из веса овцы и шерстности (сколько шерсти на килограмм масы)
-    double woolWeight = sheepWeight * getWooliness();
+    double sheepWeight = woolWeight / 1000.0 + (isMale) ? ((age.year == 1) ? (__random__(45, 55) + __random__(1, 1000) / 1000.0) : (__random__(70, 100) + __random__(1, 1000) / 1000.0)) : ((age.year == 1) ? (__random__(30, 45) + __random__(1, 1000) / 1000.0) : (__random__(60, 80) + __random__(1, 1000) / 1000.0));
 
     // Вывести информацию об овце
     void print()
@@ -48,7 +48,7 @@ struct Sheep
         cout << ")\tВес: " << sheepWeight << " кг" << "\t" << "Вес шерсти: " << woolWeight << " г" << endl;
     }
 
-    // Получить шерстность в г/кг исходя из возраста овцы
+    // Получить шерстность овцы (просто коэффиценты для расчёта веса шерсти и прироста, по сути случайные числа)
     double getWooliness()
     {
         double woolinessByYears[] = { 76.2, 76.0, 76.3, 73.5, 68.8, 65.3, 64.8, 66.3 };
@@ -60,8 +60,19 @@ struct Sheep
     void update()
     {
         age = datetimeMinus(ToDay, birthday);
-        sheepWeight += __random__(150, 200) / 1000.0;
-        woolWeight += sheepWeight * getWooliness() / 10.0;
+        double woolWeightPlus = sheepWeight * getWooliness() / 10.0;
+        woolWeight += woolWeightPlus;
+        sheepWeight += __random__(150, 200) / 1000.0 + woolWeightPlus / 1000;
+    }
+
+    // Состричь шерсть у овцы
+    double sheer()
+    {
+        double woolWeightMinus = woolWeight * __random__(985, 999) / 1000;
+        woolWeight -= woolWeightMinus;
+        sheepWeight -= woolWeightMinus / 1000;
+
+        return woolWeightMinus;
     }
 };
 
