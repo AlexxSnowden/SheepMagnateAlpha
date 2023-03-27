@@ -7,7 +7,7 @@ using namespace std;
 struct SheepName
 {
 	// Пол
-	bool isMale = rand() % 2;
+	int isMale = rand() % 2;
 
 	// Текстовое имя
 	string name = __nameGenerate__();
@@ -57,7 +57,7 @@ struct SheepName
 struct ClientName
 {
 	// Пол
-	bool isMale = rand() % 2;
+	int isMale = rand() % 2;
 
 	// Текстовое имя
 	string name = __nameGenerate__();

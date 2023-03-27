@@ -13,7 +13,7 @@ struct Sheep
     SheepName name;
 
     // Пол овцы
-    bool isMale = name.isMale;
+    int isMale = name.isMale;
 
     // Дата рождения овцы
     DateTime birthday;
@@ -43,9 +43,8 @@ struct Sheep
     {
         cout << name.name << " (" << ((isMale) ? "Баран" : "Овца") << ")\tВозраст: ";
         age.printDiff();
-        cout << " (";
-        birthday.print();
-        cout << ")\tВес: " << sheepWeight << " кг" << "\t" << "Вес шерсти: " << woolWeight << " г" << endl;
+        cout << " (" << birthday.print() << ")\tВес: " << sheepWeight << " кг"
+            << "\t" << "Вес шерсти: " << woolWeight << " г" << endl;
     }
 
     // Получить шерстность овцы (просто коэффиценты для расчёта веса шерсти и прироста, по сути случайные числа)
@@ -75,5 +74,35 @@ struct Sheep
         return woolWeightMinus;
     }
 };
+
+// Обновляем поля овец
+void updateSheeps(Sheep*& sheeps, int &sheepsSize)
+{
+    int tempSize = 0;
+    Sheep* temp = new Sheep[tempSize];
+
+    for (int i = 0; i < sheepsSize; i++)
+    {
+        sheeps[i].update();
+
+        if (sheeps[i].woolWeight < __random__(8000, 9000))
+            arrayAddEl(temp, tempSize, sheeps[i]);
+    }
+
+    delete[] sheeps;
+    sheeps = temp;
+
+    sheepsSize = tempSize;
+}
+
+void printSheeps(Sheep sheeps[], int sheepsSize)
+{
+    // Выводим данные овец
+    for (int i = 0; i < sheepsSize; i++)
+    {
+        cout << i + 1 << " ) ";
+        sheeps[i].print();
+    }
+}
 
 #endif

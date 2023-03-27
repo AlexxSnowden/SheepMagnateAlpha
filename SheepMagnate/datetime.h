@@ -2,6 +2,7 @@
 #ifndef DATETIME_H
 #define DATETIME_H
 #include "funcs.h"
+#include <string>
 
 using namespace std;
 
@@ -16,18 +17,22 @@ struct DateTime
 	// День
 	int day = __random__(1, __daysInMonth__());
 
-	// Вывести дату в формате ДД.ММ.ГГГГ
-	void print()
+	// Вернуть дату в формате ДД.ММ.ГГГГ
+	string print()
 	{
-		if (day < 10)
-			cout << "0";
+		string result = "";
 
-		cout << day << '.';
+		if (day < 10)
+			result += "0";
+
+		result += to_string(day) + '.';
 
 		if (month < 10)
-			cout << "0";
+			result += "0";
 
-		cout << month << '.' << year;
+		result += to_string(month) + '.' + to_string(year);
+
+		return result;
 	}
 
 	// Вывести дату в формате разницы
@@ -118,12 +123,13 @@ struct DateTime
 	}
 };
 
+// Глобальная переменная времени
 DateTime ToDay{2023, 1, 1};
 
 // Посчитать разницу во времени (a - b)
 DateTime datetimeMinus(DateTime a, DateTime b)
 {
-	int year_minus  = (b.month > a.month || b.day > a.day) ? (a.year - b.year - 1) : (a.year - b.year);
+	int year_minus  = ((b.month > a.month || b.day > a.day) && a.year != b.year) ? (a.year - b.year - 1) : (a.year - b.year);
 	int month_minus = 12 + a.month - b.month;
 	int day_minus;
 
@@ -138,9 +144,50 @@ DateTime datetimeMinus(DateTime a, DateTime b)
 		day_minus = a.day - b.day;
 	}
 
+	if (month_minus == 12)
+		month_minus = 0;
+
 	DateTime result{year_minus, month_minus, day_minus};
 
 	return result;
+}
+
+// Больше ли дата a, чем дата b
+bool datetimeIsAMoreThanB(DateTime a, DateTime b)
+{
+	if (a.year > b.year)
+		return 1;
+
+	else if (a.year < b.year)
+		return 0;
+
+	else if (a.month == b.month)
+		return a.day > b.day;
+
+	else
+	{
+		// Сколько всего дней в дате a (прошло с 01.01)
+		int aDays = 0;
+
+		while (a.month > 1)
+		{
+			aDays += a.__daysInMonth__();
+
+			a.month--;
+		}
+
+		// Сколько всего дней в дате b (прошло с 01.01)
+		int bDays = 0;
+
+		while (b.month > 1)
+		{
+			bDays += b.__daysInMonth__();
+
+			b.month--;
+		}
+
+		return aDays > bDays;
+	}
 }
 
 #endif
