@@ -4,8 +4,17 @@
 
 using namespace std;
 
+// Кол-во шерсти на складе в кг
+double countOfWool = 0.0;
+
+// Кол-во мяса на складе в кг
+double countOfMeat = 0.0;
+
+// Кол-во денег
+int countOfMoney = 10000;
+
 // Очистить экран и вывести меню
-void printMenu(Client clients[], int clientsSize, Sheep sheeps[], int sheepsSize, int countOfMoney, double countOfWool, double countOfMeat, int mode = 1)
+void printMenu(Client clients[], int clientsSize, Sheep sheeps[], int sheepsSize, int mode = 1)
 {
     switch (mode)
     {
@@ -35,9 +44,39 @@ void printMenu(Client clients[], int clientsSize, Sheep sheeps[], int sheepsSize
     }
 }
 
+// Сериализация данных в файл
+void serializationInFile()
+{
+    FILE* file;
+
+    if ((fopen_s(&file, "report.txt", "a")) == NULL)
+    {
+        fprintf(file, "День ");
+
+        for (int i = 0; i < ToDay.print().length(); i++)
+        {
+            fputc(ToDay.print()[i], file);
+        }
+
+        //"Баланс: " << countOfMoney << " руб.\n" << "Запасы шерсти: " << countOfWool << " кг" << endl
+        // << "Запасы мяса: " << countOfMeat << " кг" << endl << endl;
+
+        fprintf(file, "\n\nБаланс: %1d руб.\nЗапасы шерсти: %2f кг\nЗапасы мяса: %3f кг\n\n", countOfMoney, countOfWool, countOfMeat);
+    
+        fclose(file);
+    }
+}
+
 int main()
 {
     setlocale(LC_ALL, "rus");
+
+    FILE* file;
+
+    if ((fopen_s(&file, "report.txt", "w")) == NULL)
+    {
+        fclose(file);
+    }
 
     srand(time(0));
 
@@ -53,18 +92,11 @@ int main()
     // Массив клиентов
     Client* clients = new Client[clientsSize];
 
-    // Кол-во шерсти на складе в кг
-    double countOfWool = 0.0;
-
-    // Кол-во мяса на складе в кг
-    double countOfMeat = 0.0;
-
-    // Кол-во денег
-    int countOfMoney = 10000;
-
     // Переменная для хранения выбора пользователя
     // Будет использоваться в каждом выборе далее
     short cmd;
+
+    /*system("cls");
 
     printWithDelay("В этой игре тебе предстоит целый месяц ухаживать за овцами и баранами на ферме своего друга, который уехал", 50);
     printWithDelay(" в командировку на весь Январь.", 50);
@@ -79,7 +111,7 @@ int main()
     printWithDelay(" Ну что, ты готов?", 50);
 
     cout << endl;
-    cin.ignore();
+    getchar();
 
     printWithDelay("Отлично!", 50);
     Sleep(500);
@@ -92,7 +124,7 @@ int main()
     printWithDelay(" Ах да, и не забывай, что мясо на складе быстро портится.", 50);
     
     cout << endl;
-    cin.ignore();
+    getchar();*/
 
     for (int i = ToDay.day - 1; i < ToDay.__daysInMonth__(); i++)
     {
@@ -105,7 +137,7 @@ int main()
         cout << endl << endl;
 
         // Выводим меню
-        printMenu(clients, clientsSize, sheeps, sheepsSize, countOfMoney, countOfWool, countOfMeat);
+        printMenu(clients, clientsSize, sheeps, sheepsSize);
 
         int cmdSheerSize = 0;
 
@@ -168,7 +200,7 @@ int main()
             cout << "Сегодня: " << ToDay.print() << endl << endl;
 
             // Выводим меню
-            printMenu(clients, clientsSize, sheeps, sheepsSize, countOfMoney, countOfWool, countOfMeat);
+            printMenu(clients, clientsSize, sheeps, sheepsSize);
 
             int cmdKillSize = 0;
 
@@ -228,16 +260,7 @@ int main()
         int countOfCompletableOrders = isAnyClientCompletable(clients, clientsSize, countOfMeat, countOfWool);
 
         if (countOfCompletableOrders)
-        {
-            // Очищаем вывод консоли (только на Windows)
-            system("cls");
-
-            // Выводим дату
-            cout << "Сегодня: " << ToDay.print() << endl << endl;
-
-            // Выводим меню
-            printMenu(clients, clientsSize, sheeps, sheepsSize, countOfMoney, countOfWool, countOfMeat, 2);
-            
+        { 
             int cmdOrderSize = 0;
 
             // Массив для хранения номеров выбранных заказов
@@ -246,6 +269,15 @@ int main()
             // Выполняем заказы
             while(countOfCompletableOrders > 0)
             {
+                // Очищаем вывод консоли (только на Windows)
+                system("cls");
+
+                // Выводим дату
+                cout << "Сегодня: " << ToDay.print() << endl << endl;
+
+                // Выводим меню
+                printMenu(clients, clientsSize, sheeps, sheepsSize, 2);
+
                 printWithDelay("Введите номер заказа чтобы выполнить его (0 чтобы закончить): ", 25);
                 cin >> cmd;
 
@@ -304,6 +336,9 @@ int main()
                 }
                 else
                     break;
+
+                // Обновляем кол-во выполняемых заказов
+                countOfCompletableOrders = isAnyClientCompletable(clients, clientsSize, countOfMeat, countOfWool) - countOfCompletableOrders;
             }
 
             // Удаляем выполненные заказы по индексам из массива cmdOrder
@@ -311,6 +346,9 @@ int main()
 
             delete[] cmdOrder;
         }
+
+        // Делаем сериализацию данных
+        serializationInFile();
 
         // Обновляем день
         ToDay.switchDay();
