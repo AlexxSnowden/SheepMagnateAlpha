@@ -2,7 +2,9 @@
 #include "sheeps.h"
 #include "clients.h"
 
-using namespace std;
+using std::cout;
+using std::cin;
+using std::endl;
 
 // Кол-во шерсти на складе в кг
 double countOfWool = 0.0;
@@ -25,7 +27,6 @@ void printMenu(Client clients[], int clientsSize, Sheep sheeps[], int sheepsSize
         cout << "Список заказов: " << ((!clientsSize) ? "-\n" : "\n");
         printClients(clients, clientsSize, 0);
 
-        // Выводим всех овец
         cout << endl;
         printSheeps(sheeps, sheepsSize);
         cout << endl;
@@ -57,9 +58,6 @@ void serializationInFile()
         {
             fputc(ToDay.print()[i], file);
         }
-
-        //"Баланс: " << countOfMoney << " руб.\n" << "Запасы шерсти: " << countOfWool << " кг" << endl
-        // << "Запасы мяса: " << countOfMeat << " кг" << endl << endl;
 
         fprintf(file, "\n\nБаланс: %1d руб.\nЗапасы шерсти: %2f кг\nЗапасы мяса: %3f кг\n\n", countOfMoney, countOfWool, countOfMeat);
     
@@ -96,7 +94,7 @@ int main()
     // Будет использоваться в каждом выборе далее
     short cmd;
 
-    /*system("cls");
+    system("cls");
 
     printWithDelay("В этой игре тебе предстоит целый месяц ухаживать за овцами и баранами на ферме своего друга, который уехал", 50);
     printWithDelay(" в командировку на весь Январь.", 50);
@@ -124,11 +122,10 @@ int main()
     printWithDelay(" Ах да, и не забывай, что мясо на складе быстро портится.", 50);
     
     cout << endl;
-    getchar();*/
+    getchar();
 
     for (int i = ToDay.day - 1; i < ToDay.__daysInMonth__(); i++)
     {
-        // Очищаем вывод консоли (только на Windows)
         system("cls");
 
         // Выводим дату с задержкой 100 мс между символами
@@ -157,19 +154,7 @@ int main()
             if (cmd)
             {
                 // Было ли животное уже подстрижено
-                bool isSheerFlag = 0;
-
-                for (int k = 0; k < cmdSheerSize; k++)
-                {
-                    if (cmd - 1 == cmdSheer[k])
-                    {
-                        isSheerFlag = 1;
-
-                        break;
-                    }
-                }
-
-                if (isSheerFlag)
+                if (isElInArray(cmdSheer, cmdSheerSize, cmd - 1))
                 {
                     cout << "Это животное уже было подстрижено" << endl;
                     j--;
@@ -191,9 +176,8 @@ int main()
         delete[] cmdSheer;
 
         // Если овец больше 2
-        if (sheepsSize > 2) //------------------- 2
+        if (sheepsSize > 2)
         {
-            // Очищаем вывод консоли (только на Windows)
             system("cls");
 
             // Выводим дату
@@ -208,7 +192,7 @@ int main()
             int* cmdKill = new int[cmdKillSize];
 
             // Убиваем 2 овцы (или 1 овцу если овец 3)
-            for (int j = 0; j < ((sheepsSize == 3) ? 1 : 2); j++) // ------ 2
+            for (int j = 0; j < ((sheepsSize == 3) ? 1 : 2); j++)
             {
                 printWithDelay("Введите номер животного на убой (0 чтобы закончить): ", 25);
                 cin >> cmd;
@@ -216,19 +200,7 @@ int main()
                 if (cmd)
                 {
                     // Было ли животное уже отправлено на убой до этого
-                    bool isKillFlag = 0;
-
-                    for (int k = 0; k < cmdKillSize; k++)
-                    {
-                        if (cmd - 1 == cmdKill[k])
-                        {
-                            isKillFlag = 1;
-
-                            break;
-                        }
-                    }
-
-                    if (isKillFlag)
+                    if (isElInArray(cmdKill, cmdKillSize, cmd - 1))
                     {
                         cout << "Это животное уже пошло на убой" << endl;
                         j--;
@@ -269,7 +241,6 @@ int main()
             // Выполняем заказы
             while(countOfCompletableOrders > 0)
             {
-                // Очищаем вывод консоли (только на Windows)
                 system("cls");
 
                 // Выводим дату
@@ -284,19 +255,7 @@ int main()
                 if (cmd)
                 {
                     // Был ли выбран заказ уже до этого
-                    bool isAlreadyComplete = 0;
-
-                    for (int k = 0; k < cmdOrderSize; k++)
-                    {
-                        if (cmd - 1 == cmdOrder[k])
-                        {
-                            isAlreadyComplete = 1;
-
-                            break;
-                        }
-                    }
-
-                    if (isAlreadyComplete)
+                    if (isElInArray(cmdOrder, cmdOrderSize, cmd - 1))
                     {
                         cout << "Этот заказ уже выполнен" << endl;
 
@@ -367,8 +326,8 @@ int main()
             break;
         }
 
-        // Ежедневно списываем от 500 до 1000 (или от 500 до countOfMoney, если
-        // баланс меньше 1000) на расходы если баланс не нулевой
+        // Ежедневно списываем от 500 до 1000 на расходы если баланс не нулевой
+        // А если денег меньше 1000, списываем всё
         if (countOfMoney > 1000)
             countOfMoney -= __random__(500, 1000);
         else

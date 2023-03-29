@@ -3,7 +3,27 @@
 #define FUNCS_H
 #include "windows.h"
 
-using namespace std;
+using std::cout;
+using std::string;
+
+// Есть ли элемент в массиве
+template <class T>
+bool isElInArray(T a[], int size, T el)
+{
+    bool isElInArray = 0;
+
+    for (int i = 0; i < size; i++)
+    {
+        if (el == a[i])
+        {
+            isElInArray = 1;
+
+            break;
+        }
+    }
+
+    return isElInArray;
+}
 
 // Случайное число в диапазоне от __from__ до __to__
 inline int __random__(int __from__, int __to__)

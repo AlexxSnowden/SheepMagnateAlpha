@@ -2,7 +2,7 @@
 #ifndef NAMES_H
 #define NAMES_H
 
-using namespace std;
+using std::string;
 
 struct SheepName
 {

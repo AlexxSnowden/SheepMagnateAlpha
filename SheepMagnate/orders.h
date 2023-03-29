@@ -4,8 +4,6 @@
 #include "datetime.h"
 #include "funcs.h"
 
-using namespace std;
-
 struct Order
 {
 	// Срок выполнения

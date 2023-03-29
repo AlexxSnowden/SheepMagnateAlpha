@@ -4,7 +4,9 @@
 #include "funcs.h"
 #include <string>
 
-using namespace std;
+using std::cout;
+using std::string;
+using std::to_string;
 
 struct DateTime
 {

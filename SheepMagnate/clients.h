@@ -4,7 +4,8 @@
 #include "orders.h"
 #include "names.h"
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 struct Client
 {
