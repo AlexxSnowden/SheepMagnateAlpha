@@ -41,6 +41,20 @@ int isAnyClientCompletable(Client clients[], int clientsSize, double countOfMeat
 	return countOfCompletableOrders;
 }
 
+// Кол-во клиентов, заказы которых можно завершить, учитывая уже выполненные заказы
+int isAnyClientCompletable(Client clients[], int clientsSize, int clientsComplete[], int clientsCompleteSize, double countOfMeat, double countOfWool)
+{
+	int countOfCompletableOrders = 0;
+
+	for (int i = 0; i < clientsSize; i++)
+	{
+		if (clients[i].order.order < ((clients[i].order.orderType) ? countOfMeat : countOfWool) && !isElInArray(clientsComplete, clientsCompleteSize, i))
+			countOfCompletableOrders++;
+	}
+
+	return countOfCompletableOrders;
+}
+
 // Удаляем истёкшие заказы
 void updateClients(Client*& clients, int& size)
 {

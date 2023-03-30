@@ -151,7 +151,13 @@ int main()
             printWithDelay("Введите номер животного для стрижки (0 чтобы закончить): ", 25);
             cin >> cmd;
 
-            if (cmd)
+            if (cmd < 0 || cmd > sheepsSize)
+            {
+                cout << "Животного с таким номером нет" << endl;
+                j--;
+                continue;
+            }
+            else if (cmd)
             {
                 // Было ли животное уже подстрижено
                 if (isElInArray(cmdSheer, cmdSheerSize, cmd - 1))
@@ -175,7 +181,7 @@ int main()
 
         delete[] cmdSheer;
 
-        // Если овец больше 2
+        // Если овец больше 2, даём пользователю выбрать овец на убой
         if (sheepsSize > 2)
         {
             system("cls");
@@ -197,7 +203,13 @@ int main()
                 printWithDelay("Введите номер животного на убой (0 чтобы закончить): ", 25);
                 cin >> cmd;
 
-                if (cmd)
+                if (cmd < 0 || cmd > sheepsSize)
+                {
+                    cout << "Животного с таким номером нет" << endl;
+                    j--;
+                    continue;
+                }
+                else if (cmd)
                 {
                     // Было ли животное уже отправлено на убой до этого
                     if (isElInArray(cmdKill, cmdKillSize, cmd - 1))
@@ -210,7 +222,7 @@ int main()
                         arrayAddEl(cmdKill, cmdKillSize, cmd - 1);
 
                     double woolPlus = sheeps[cmd - 1].sheer() / 1000.0;
-                    double meatPlus = (sheeps[cmd - 1].sheepWeight - woolPlus) * __random__(2450, 3505) / 10000;
+                    double meatPlus = (sheeps[cmd - 1].sheepWeight - woolPlus) * __random__(4000, 5000) / 10000.0;
 
                     cout << "В запасы добавлено " << meatPlus << " кг мяса" << endl;
                     countOfMeat += meatPlus;
@@ -238,27 +250,41 @@ int main()
             // Массив для хранения номеров выбранных заказов
             int* cmdOrder = new int[cmdOrderSize];
 
+            // Флаг, показывающий, была ли прервана итерация с помощью continue
+            bool flagIsContinue = 0;
+
             // Выполняем заказы
             while(countOfCompletableOrders > 0)
             {
-                system("cls");
+                if (!flagIsContinue)
+                {
+                    system("cls");
 
-                // Выводим дату
-                cout << "Сегодня: " << ToDay.print() << endl << endl;
+                    // Выводим дату
+                    cout << "Сегодня: " << ToDay.print() << endl << endl;
 
-                // Выводим меню
-                printMenu(clients, clientsSize, sheeps, sheepsSize, 2);
-
+                    // Выводим меню
+                    printMenu(clients, clientsSize, sheeps, sheepsSize, 2);
+                }
+                else
+                    flagIsContinue = 0;
+                
                 printWithDelay("Введите номер заказа чтобы выполнить его (0 чтобы закончить): ", 25);
                 cin >> cmd;
 
-                if (cmd)
+                if (cmd < 0 || cmd > clientsSize)
+                {
+                    cout << "Заказа с таким номером нет" << endl;
+                    flagIsContinue = 1;
+                    continue;
+                }
+                else if (cmd)
                 {
                     // Был ли выбран заказ уже до этого
                     if (isElInArray(cmdOrder, cmdOrderSize, cmd - 1))
                     {
                         cout << "Этот заказ уже выполнен" << endl;
-
+                        flagIsContinue = 1;
                         continue;
                     }
 
@@ -267,6 +293,8 @@ int main()
                         if (clients[cmd - 1].order.order > countOfMeat)
                         {
                             cout << "Вы не можете выполнить этот заказ. У Вас слишком мало мяса" << endl;
+                            flagIsContinue = 1;
+                            continue;
                         }
                         else
                         {
@@ -282,6 +310,8 @@ int main()
                         if (clients[cmd - 1].order.order > countOfWool)
                         {
                             cout << "Вы не можете выполнить этот заказ. У Вас слишком мало шерсти" << endl;
+                            flagIsContinue = 1;
+                            continue;
                         }
                         else
                         {
@@ -297,7 +327,7 @@ int main()
                     break;
 
                 // Обновляем кол-во выполняемых заказов
-                countOfCompletableOrders = isAnyClientCompletable(clients, clientsSize, countOfMeat, countOfWool) - countOfCompletableOrders;
+                countOfCompletableOrders = isAnyClientCompletable(clients, clientsSize, cmdOrder, cmdOrderSize, countOfMeat, countOfWool);
             }
 
             // Удаляем выполненные заказы по индексам из массива cmdOrder
